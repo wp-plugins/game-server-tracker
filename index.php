@@ -1,179 +1,124 @@
 <?php
 /*
 Plugin Name: Game Server Tracker
-Plugin URI: http://hannawerner.com/wordpress/game-server-tracker/
-Description: Gets current stats of a Game Server from GameTracker.com and displays them in the sidebar. Some of the games this tracker works on are: Battlefield 3 [BETA], Battlefield Bad Company 2, Call of Duty 2, Call of Duty 4, Call of Duty : Black Ops, Counter Strike 1.6, Counter Strike Source, Day of Defeat Source, Left 4 Dead 2, Medal of Honor, Minecraft, Team Fortress 2 and Wolfenstein Enemy Territory.
-Version: 1.0
+Plugin URI: http://hannawerner.com/wordpress/game-server-tracker-version-1-1/
+Description: Gets current stats of a Game Server from GameTracker.com and displays them in the sidebar. The Game Server Tracker supports all games supported by GameTracker.com.
+Version: 1.1
 License: GPLv2
 Author: Hanna Camille Werner
 Author URI: http://www.hannawerner.com
 */
 
-class hcw_gameserver_tracker extends WP_Widget {
- 
- 
-    /** constructor -- name this the same as the class above */
-    function hcw_gameserver_tracker() {
-        parent::WP_Widget(false, $name = 'Game Server Tracker');
-    }
- 
-    /** @see WP_Widget::widget -- do not rename this */
+// Inspired by the built-in WP_Widget_Text class
 
-    function widget($args, $instance) {
-        extract( $args );
-        $title 		= apply_filters('widget_title', $instance['title']);
-        $serverip 	= $instance['message'];
-   /**  $clanname 	= $instance['messagetwo']; **/
-        ?>
-              <?php echo $before_widget; ?>
-                  <?php if ( $title )
-                        echo $before_title . $title . $after_title; ?>
+class HCW_Gameserver_Tracker extends WP_Widget {
 
+	function HCW_Gameserver_Tracker() {
+		$widget_ops = array('classname' => 'widget_hcw_gst', 'description' => __('Displays Game  Server Information'));
+		$control_ops = array();
+		$this->WP_Widget('hcwgst', __('Game Server Tracker'), $widget_ops, $control_ops);
+	}
 
-<!------------------------------------->
+	function widget( $args, $instance ) {
+		extract($args);
+		$serverip = $instance['serverip'];
+		
+  	echo $before_widget; 
+
+    ?>
+
+<script type="text/javascript" language="JavaScript">
+<!--
+	function HideMoreContent(d) {
+		document.getElementById(d).style.display = "none";
+	}
+	function ShowMoreContent(d) {
+		document.getElementById(d).style.display = "block";
+	}
+	function ReverseDisplay(d) {
+		if(document.getElementById(d).style.display == "none") { document.getElementById(d).style.display = "block"; }
+		else { document.getElementById(d).style.display = "none"; }
+	}
+//-->
+</script>
 
 <?php
+$content = file_get_contents("http://www.gametracker.com/server_info/$serverip/");
+preg_match("/<span class=\"item_color_success\"(.*?)>(.+?)<\/span>/s", $content, $matchesalive);
+preg_match("/<span id=\"HTML_num_players\"(.*?)>(.+?)<\/span>/s", $content, $matchesnumplayers);
+preg_match("/<span id=\"HTML_max_players\"(.*?)>(.+?)<\/span>/s", $content, $matchestotalplayers);
+preg_match("/<span id=\"HTML_num_bots\"(.*?)>(.+?)<\/span>/s", $content, $matchesbots);
+preg_match("/<div class=\"si_map_header\" id=\"HTML_curr_map\"(.*?)>(.+?)<\/div>/s", $content, $matchesmap);
+preg_match("/<span class=\"item_color_title\"(.*?)>Game:<\/span>(.+?)&nbsp;/s", $content, $matchesgame);
+preg_match("/<span class=\"item_color_title\"(.*?)>Name:<\/span>(.+?)<br\/\>/s", $content, $matchesclan);
+preg_match("/<div class=\"si_map_image\" id=\"HTML_map_ss_img\"(.*?)>(.+?)<\/div>/s", $content, $matchesimgmap);
 
-function textbetweenarray($s1,$s2,$s){
-  $myarray=array();
-  $s1=strtolower($s1);
-  $s2=strtolower($s2);
-  $L1=strlen($s1);
-  $L2=strlen($s2);
-  $scheck=strtolower($s);
-
-  do{
-  $pos1 = strpos($scheck,$s1);
-  if($pos1!==false){
-    $pos2 = strpos(substr($scheck,$pos1+$L1),$s2);
-    if($pos2!==false){
-      $myarray[]=substr($s,$pos1+$L1,$pos2);
-      $s=substr($s,$pos1+$L1+$pos2+$L2);
-      $scheck=strtolower($s);
-      }
-        }
-  } while (($pos1!==false)and($pos2!==false));
-return $myarray;
-}
-
-$content = file_get_contents("http://www.gametracker.com/server_info/$serverip");
-
-$servergame     = "<strong>Game:</strong> ";
-$playerstats    = "<strong>Players Online:</strong> ";
-$serverstatus   = "<strong>Status:</strong> ";
-$currentmap     = "<strong>Current Map:</strong> ";
-$serverclan     = "<strong>Clan:</strong> ";
-/** $members        = "<strong>Members:</strong> "; **/
-
-$nextline       = "<br />";
-
-$trServerName = textbetweenarray("<span class=\"item_color_title\">Name:</span>", "<br/>", $content);
-$trServerGame = textbetweenarray("<span class=\"item_color_title\">Game:</span>", "&nbsp;", $content);
-$trCurrent    = textbetweenarray("<span id=\"HTML_num_players\">", "</span>", $content);
-$trTotal      = textbetweenarray("<span id=\"HTML_max_players\">", "</span>", $content);
-$trStatus     = textbetweenarray("<span class=\"item_color_success\">", "</span>", $content);
-$trCurrMap    = textbetweenarray("<div class=\"si_map_header\" id=\"HTML_curr_map\">", "</div>", $content);
-/** $trMembers    = textbetweenarray("<span class=\"item_color_title\">Members:</span>", "&nbsp;", $content);  **/
-
-/** SERVER NAME **/
-
-foreach($trServerName as $tr) {
- echo $tr;
-}
-
-echo $nextline. "\n"; 
-
-/** CLAN 
-
-echo $serverclan;
-echo $clanname;
-echo $nextline. "\n"; 
-
-**/
-/** MEMBERS
-
-echo $members ;
-foreach($trMembers as $tr) {
- echo $tr;
-}
-echo $nextline. "\n"; 
- **/
-/** GAME **/
-
-echo $servergame;
-foreach($trServerGame as $tr) {
- echo $tr;
-}
-echo $nextline. "\n"; 
-
-/** STATUS **/
-
-echo $serverstatus;
-foreach($trStatus  as $tr) {
- echo $tr;
-}
-echo $nextline. "\n"; 
-
-/** CURRENT and TOTAL **/
-
-echo $playerstats;
-foreach($trCurrent as $tr) {
- echo $tr;
-}
-?>/<?php
-foreach($trTotal as $tr) {
- echo $tr;
-}
-echo $nextline. "\n"; 
+	echo '<ul>';
+	echo '<li><strong>';
+	echo $instance['alttitle'];
+	echo '</strong><br /><strong>Game: </strong>';
+	echo $matchesgame[2];
+	echo '<br /><strong>Server Status: </strong>';
+	echo $matchesalive[2];
+	echo '<br /><strong>Players: </strong>';
+	echo $matchesnumplayers[2]; 
+	echo '/';
+	echo $matchestotalplayers[2];
+	echo '<br /><strong>Bots: </strong>';
+	echo $matchesbots[2];
+	echo '<br /><strong>Map: </strong>';
+	echo $matchesmap[2];
 ?>
-<?php
-/** CURRENTMAP **/
+<a class="moreserverinfo" href="javascript:ReverseDisplay('<?php echo $serverip; ?>')"><strong>&darr;</strong></a>
+<div class="content-sidebar" id="<?php echo $serverip; ?>" style="display:none;">
+	<?php echo $matchesimgmap[2]; ?>
+</div>
+	<?php
+		echo '</li>';
+		echo '</ul>';
+	?>
+  	<?php echo $after_widget;
+	}
 
-echo $currentmap;
-foreach($trCurrMap   as $tr) {
- echo $tr;
-}
-echo $nextline. "\n"; 
-
-
-/*****************************/
-?>
-
-
-              <?php echo $after_widget; ?>
-        <?php
-    }
- 
-    /** @see WP_Widget::update -- do not rename this */
-    function update($new_instance, $old_instance) {
+	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
-		$instance['title'] = strip_tags($new_instance['title']);
-		$instance['message'] = strip_tags($new_instance['message']);
-	/**	$instance['messagetwo'] = strip_tags($new_instance['messagetwo']); **/
-        return $instance;
-    }
- 
-    /** @see WP_Widget::form -- do not rename this */
-    function form($instance) {
- 
-        $title 		= esc_attr($instance['title']);
-        $serverip	= esc_attr($instance['message']);
-  /**   $clanname	= esc_attr($instance['messagetwo']);   **/
-        ?>
-         <p>
-          <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
-          <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
-        </p>
+		$instance['serverip'] = strip_tags($new_instance['serverip']);
+		$instance['alttitle'] = strip_tags($new_instance['alttitle']);
+		return $instance;
+	}
+
+	function form( $instance ) {
+		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'serverip' => '', 'alttitle' => false ) );
+
+		if ($instance['serverip'])
+  		$title = preg_replace('/\?.*/', "", basename($instance['serverip']));
+
+?>
+    <?php ?>
+    <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="hidden" value="<?php echo $title; ?>" />
+
 		<p>
-          <label for="<?php echo $this->get_field_id('message'); ?>"><?php _e('Server and port. eg: 127.0.0.1:27960'); ?></label>
-          <input class="widefat" id="<?php echo $this->get_field_id('message'); ?>" name="<?php echo $this->get_field_name('message'); ?>" type="text" value="<?php echo $serverip; ?>" />
-        </p>
+			<label for="<?php echo $this->get_field_id('alttitle'); ?>">
+				&nbsp;<?php _e('Server Name:'); ?>
+				<input class="widefat" id="<?php echo $this->get_field_id('alttitle'); ?>" name="<?php echo $this->get_field_name('alttitle'); ?>" type="text" value="<?php echo $instance['alttitle']; ?>" />
+				
+			</label>
+		</p>
 
+		<p>
+			<label for="<?php echo $this->get_field_id('serverip'); ?>">
+				 &nbsp;<?php _e('Server IP and Port:'); ?>
+				<input class="widefat" id="<?php echo $this->get_field_id('serverip'); ?>" name="<?php echo $this->get_field_name('serverip'); ?>" type="text" value="<?php echo $instance['serverip']; ?>" /><br />&nbsp;<small>e.g. 127.0.0.1:27960</small><br />
+			</label>
+		</p>
 
-        <?php
-    }
- 
- 
-} // end class hcw_gameserver_tracker
-add_action('widgets_init', create_function('', 'return register_widget("hcw_gameserver_tracker");'));
+<?php
+	}
+}
+
+function widget_hcw_gst_init() {
+  register_widget('HCW_Gameserver_Tracker');
+}
+add_action('init', 'widget_hcw_gst_init', 1);
+
 ?>
