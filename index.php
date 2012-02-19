@@ -1,15 +1,17 @@
 <?php
 /*
 Plugin Name: Game Server Tracker
-Plugin URI: http://hannawerner.com/wordpress/game-server-tracker-version-1-1/
-Description: Gets current stats of a Game Server from GameTracker.com and displays them in the sidebar. The Game Server Tracker supports all games supported by GameTracker.com.
-Version: 1.1
+Plugin URI: http://hannawerner.com/wordpress/game-server-tracker-version-1-5/
+Description: Gets current stats of a Game Server from GameTracker.com and displays them in the sidebar. The Game Server Tracker supports all games that are supported by GameTracker.com.
+Version: 1.5
 License: GPLv2
 Author: Hanna Camille Werner
 Author URI: http://www.hannawerner.com
 */
 
 // Inspired by the built-in WP_Widget_Text class
+
+$alttitle = $instance['alttitle'];
 
 class HCW_Gameserver_Tracker extends WP_Widget {
 
@@ -23,7 +25,9 @@ class HCW_Gameserver_Tracker extends WP_Widget {
 		extract($args);
 		$serverip = $instance['serverip'];
 		
-  	echo $before_widget; 
+  	echo $before_widget . $before_title;
+		echo $instance['alttitle'];
+		echo $after_title; 
 
     ?>
 
@@ -54,23 +58,23 @@ preg_match("/<span class=\"item_color_title\"(.*?)>Name:<\/span>(.+?)<br\/\>/s",
 preg_match("/<div class=\"si_map_image\" id=\"HTML_map_ss_img\"(.*?)>(.+?)<\/div>/s", $content, $matchesimgmap);
 
 	echo '<ul>';
-	echo '<li><strong>';
-	echo $instance['alttitle'];
-	echo '</strong><br /><strong>Game: </strong>';
+	echo '<li><strong>Game: </strong>';
 	echo $matchesgame[2];
-	echo '<br /><strong>Server Status: </strong>';
+	echo '</li><li><strong>IP: </strong>';
+	echo $serverip;
+	echo '</li><li><strong>Server Status: </strong>';
 	echo $matchesalive[2];
-	echo '<br /><strong>Players: </strong>';
+	echo '</li><li><strong>Players: </strong>';
 	echo $matchesnumplayers[2]; 
 	echo '/';
 	echo $matchestotalplayers[2];
-	echo '<br /><strong>Bots: </strong>';
+	echo '</li><li><strong>Bots: </strong>';
 	echo $matchesbots[2];
-	echo '<br /><strong>Map: </strong>';
-	echo $matchesmap[2];
+	echo '</li><li><strong>Map: </strong>';
+	
 ?>
-<a class="moreserverinfo" href="javascript:ReverseDisplay('<?php echo $serverip; ?>')"><strong>&darr;</strong></a>
-<div class="content-sidebar" id="<?php echo $serverip; ?>" style="display:none;">
+<a class="moreserverinfo" href="javascript:ReverseDisplay('<?php echo $serverip; ?>')"><?php echo $matchesmap[2]; ?> &raquo;</a>
+<div class="content-sidebar" id="<?php echo $serverip; ?>" style="display:none; padding-top:5px;">
 	<?php echo $matchesimgmap[2]; ?>
 </div>
 	<?php
@@ -108,7 +112,7 @@ preg_match("/<div class=\"si_map_image\" id=\"HTML_map_ss_img\"(.*?)>(.+?)<\/div
 		<p>
 			<label for="<?php echo $this->get_field_id('serverip'); ?>">
 				 &nbsp;<?php _e('Server IP and Port:'); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('serverip'); ?>" name="<?php echo $this->get_field_name('serverip'); ?>" type="text" value="<?php echo $instance['serverip']; ?>" /><br />&nbsp;<small>e.g. 127.0.0.1:27960</small><br />
+				<input class="widefat" id="<?php echo $this->get_field_id('serverip'); ?>" name="<?php echo $this->get_field_name('serverip'); ?>" type="text" value="<?php echo $instance['serverip']; ?>" /><br />&nbsp;<small>e.g. 213.239.207.85:27960</small><br />
 			</label>
 		</p>
 

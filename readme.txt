@@ -1,9 +1,9 @@
 === Plugin Name ===
 Contributors: Sinopa
-Tags: games, servers, details, tracker
+Tags: games, details, tracker, maps
 Requires at least: 3.0
 Tested up to: 3.2.1
-Stable tag: 1.1
+Stable tag: 1.5
 
 Gets current stats of a Game Server from GameTracker.com and displays them in the sidebar.
 
@@ -32,6 +32,11 @@ Added support for multiple instances and current map thumbnail.
 
 == Upgrade Notice ==
 
+= 1.5 =
+* February 19, 2012 - 1.3 release.
+* Removed some minor bugs.
+
+
 = 1.1 =
 * October 30, 2011 - 1.1 release.
 * Added support for multiple instances and current map thumbnail.
@@ -41,7 +46,7 @@ Added support for multiple instances and current map thumbnail.
 
 == Screenshots ==
 
-Screenshots can be found at http://hannawerner.com/wordpress/game-server-tracker-version-1-1/
+Screenshots and demo can be found at http://hannawerner.com/wordpress/game-server-tracker-version-1-1/
 
 == Donate ==
 
