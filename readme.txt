@@ -3,7 +3,7 @@ Contributors: Sinopa
 Tags: games, details, tracker, maps
 Requires at least: 3.0
 Tested up to: 3.2.1
-Stable tag: 1.5
+Stable tag: 1.6
 
 Gets current stats of a Game Server from GameTracker.com and displays them in the sidebar.
 
@@ -18,7 +18,7 @@ Gets current stats of a Game Server from GameTracker.com and displays them in th
 3. Activate the plugin in your Wordpress Admin UI.
 4. Drag the widget to sidebar menu
 5. Write Server Name in widget.
-6. Write IP address and Port. eg. 127.0.0.1:27960
+6. Write IP address and Port. eg. 213.239.207.85:27960
 
 == Frequently Asked Questions ==
 
@@ -32,10 +32,13 @@ Added support for multiple instances and current map thumbnail.
 
 == Upgrade Notice ==
 
-= 1.5 =
-* February 19, 2012 - 1.3 release.
-* Removed some minor bugs.
+= 1.6 =
+* March 22, 2012 - 1.6 release.
+* Added link to Gametracker.com.
 
+= 1.5 =
+* February 19, 2012 - 1.5 release.
+* Removed some minor bugs.
 
 = 1.1 =
 * October 30, 2011 - 1.1 release.
@@ -46,7 +49,7 @@ Added support for multiple instances and current map thumbnail.
 
 == Screenshots ==
 
-Screenshots and demo can be found at http://hannawerner.com/wordpress/game-server-tracker-version-1-1/
+Screenshots and demo can be found at http://hannawerner.com/wordpress/game-server-tracker-version-1-6/
 
 == Donate ==
 
