@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Game Server Tracker
-Plugin URI: http://hannawerner.com/wordpress/game-server-tracker-version-1-5/
+Plugin URI: http://hannawerner.com/wordpress/game-server-tracker-version-1-7/
 Description: Gets current stats of a Game Server from GameTracker.com and displays them in the sidebar. The Game Server Tracker supports all games that are supported by GameTracker.com.
-Version: 1.5
+Version: 1.7
 License: GPLv2
 Author: Hanna Camille Werner
 Author URI: http://www.hannawerner.com
