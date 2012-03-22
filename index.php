@@ -60,9 +60,11 @@ preg_match("/<div class=\"si_map_image\" id=\"HTML_map_ss_img\"(.*?)>(.+?)<\/div
 	echo '<ul>';
 	echo '<li><strong>Game: </strong>';
 	echo $matchesgame[2];
-	echo '</li><li><strong>IP: </strong>';
+	echo '</li><li><strong>IP: </strong><a href="http://www.gametracker.com/server_info/';
 	echo $serverip;
-	echo '</li><li><strong>Server Status: </strong>';
+	echo '/" target="_blank">';
+	echo $serverip;
+	echo '</a></li><li><strong>Server Status: </strong>';
 	echo $matchesalive[2];
 	echo '</li><li><strong>Players: </strong>';
 	echo $matchesnumplayers[2]; 
